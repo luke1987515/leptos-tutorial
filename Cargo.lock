@@ -725,7 +725,10 @@ dependencies = [
 name = "leptos-tutorial"
 version = "0.1.0"
 dependencies = [
+ "js-sys",
  "leptos",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
