@@ -25,8 +25,10 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
 
-      - name: Install Trunk
-        run: cargo install trunk
+      - name: Download and Install Trunk
+        run: |
+          wget -qO- https://github.com/trunk-rs/trunk/releases/latest/download/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf- -C /usr/local/bin
+          trunk --version
 
       - name: Build with Trunk
         # ⚠️ 注意：public-url 後面的名稱要跟你的 GitHub Repository 名稱一模一樣！
