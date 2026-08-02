@@ -1,0 +1,45 @@
+name: Deploy Leptos App to GitHub Pages
+
+on:
+  push:
+    branches: [ main ] # 如果你的預設分支是 master，請改成 master
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Install Trunk
+        run: cargo install trunk
+
+      - name: Build with Trunk
+        # ⚠️ 注意：public-url 後面的名稱要跟你的 GitHub Repository 名稱一模一樣！
+        run: trunk build --release --public-url /leptos-tutorial/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
